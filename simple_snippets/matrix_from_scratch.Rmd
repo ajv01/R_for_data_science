@@ -1,0 +1,44 @@
+---
+title: "Creating a matrix"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Creating data from a vector.
+```{r sales_vec}
+sales_vec <- c(1000, 1300, 1300, 1100, 1400, 800, 1200, 1500, 1850, 2330, 860, 1300, 1400, 1600, 1970, 570, 380, 450, 465, 580, 155, 190, 210, 250, 300)
+```
+
+Creating a matrix from a vector.
+```{r vec_to_mtr}
+sales_mtr <- matrix(sales_vec, nrow = 5, byrow = TRUE)
+```
+
+Row names to matrix
+```{r add_colnames}
+colnames(sales_mtr) <- c(1990, 1991, 1992, 1993, 1994)
+```
+
+```{r add_rownames}
+rownames(sales_mtr) <- c("Commercial Satellites Delivered",
+                         "Satellite Services",
+                         "Satellite Ground Equipment",
+                         "Commercial Launches",
+                         "Remote Sensing Data")
+```
+Why does the following code produces an error?
+`sales_tbl <- rownames_to_column(sales_mtr, var="Industry")`
+
+It produces an error because it is trying to convert row names to a column. By definition, a matrix can only consist of one data type. In this case: numbers. To use `rownames_to_columns` the matrix must first be converted to a data frame to allow for different data types.
+
+```{r}
+sales_df <- data.frame(sales_mtr, check.names = FALSE)
+sales_df <- rownames_to_column(sales_df, var="Industry")
+sales_tib <- as_tibble(sales_df)
+```
+
+
